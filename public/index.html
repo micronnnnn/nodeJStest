@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MVVM Dessert Test</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <style>
+    .text-danger {
+      color: #dc3545 !important;
+      font-size: 2em;
+    }
+
+    table tbody tr td.r-o {
+      width: 120px;
+      color: #707079;
+    }
+
+    .room-item .ri-text {
+      border: 1px solid #ebebeb;
+      border-top: none;
+      padding: 24px 24px 30px 28px;
+    }
+  </style>
+</head>
+<body>
+  <section class="rooms-section spad">
+    <div id="dessertQuery" class="container">
+      <h2>Welcome to Mitac Dessert Shop!</h2>
+      <marquee style="font-size:20pt; color:red;" behavior="altemate" bgcolor="#FFFF00">{{showText}}</marquee>
+
+      <div class="line-it-button" data-lang="zh_Hant" data-type="friend"
+           data-env="REAL" data-count="true" data-lineId="@148skkmm"
+           style="display: none;"></div>
+
+      <!-- 商品瀏覽 -->
+      <div v-if="!showDetailed && !showShoppingDetailed && !showModifiedDetailed">
+        <div class="row">
+          <div v-for="d in dessertList" class="col-lg-4 col-md-6">
+            <div class="room-item">
+              <img :src="'http://localhost:3000/dessertPic?id=' + d.dessert_id" width="350" height="300">
+              <div class="ri-text">
+                <h4>商品名稱: {{d.dessert_name}}</h4>
+                <h4>商品價格: {{d.dessert_price}} NTD</h4>
+                <button @click="loadDessert(d)">商品詳情</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+			<div v-if="showDetailed=== true">
+				<div class="align-middle">
+					<table border="2">
+						<tr>
+							<td>商品圖片</td>
+							<td><img
+								:src="'http://localhost:8080/dessert/dessertPic?id='+dessertItem.dessert_id"
+								width=350px height=300px></td>
+						</tr>
+						<tr>
+							<td>商品名稱</td>
+							<td>{{dessertItem.dessert_name}}</td>
+						</tr>
+						<tr>
+							<td>商品價錢</td>
+							<td>{{dessertItem.dessert_price}}元</td>
+						</tr>
+						<tr>
+							<td>商品有效日期</td>
+							<td>{{dessertItem.dessert_preserve_date}}天</td>
+						</tr>
+						<tr>
+							<td>商品庫存量</td>
+							<td>{{dessertItem.dessert_amount}}</td>
+						</tr>
+					</table>
+					<br> <br>
+					<form v-on:submit.prevent="addShoppingCart">
+						<span class="text-danger">{{ itemError }}</span> <input
+							type="hidden" v-model="shoppinglist.item" /> <input
+							type="number" min="1" max="9" step="1"
+							v-model="shoppinglist.amount" />
+						<button type="submit" class="btn btn-primary">加入購物車</button>
+					</form>
+					<br>
+					<form v-on:submit.prevent="checkShoppingCart">
+						<button type="submit" class="btn btn-primary">查看購物車</button>
+					</form>
+					<br>
+					<form v-on:submit.prevent="backtoallpage">
+						<button type="submit" class="btn btn-primary">回到商品瀏覽頁面</button>
+					</form>
+				</div>
+			</div>
+			<div v-if="showShoppingDetailed=== true">
+			<p v-if="countdownSeconds > 0">⚠️ 購物車剩餘 {{ countdownSeconds }} 秒後將被清除！</p>
+				<div class="align-middle">
+					<span class="text-danger">購物車內容</span>
+					<table class="table table-striped">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">商品圖</th>
+								<th scope="col">名稱</th>
+								<th scope="col">價格</th>
+								<th scope="col">數量</th>
+								<th scope="col">小計</th>
+								<th scope="col"></th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="d in all_shoppinglist">
+								<td><img
+									:src="'http://localhost:8080/dessert/dessertPic?id='+d.dessert_id"
+									width=300px height=200px></td>
+								<td>{{d.dessert_name}}</td>
+								<td>{{d.dessert_price}}</td>
+								<td>{{d.dessert_amount}}</td>
+								<td>{{d.subtotal}}</td>
+								<td><button v-on:click="loadModifyShoppingCart(d)">修改數量</button></td>
+								<td><button v-on:click="removeShoppingCart(d)">移除商品</button></td>
+							</tr>
+
+						</tbody>
+					</table>
+					
+<!-- 					空購物車提示 -->
+<!-- 						<div v-else class="alert alert-info text-center"> -->
+<!--   						購物車目前是空的。 -->
+<!-- 						</div> -->
+					<div class="align-middle">
+						<font color="blue" size="5">目前總價錢為{{total}}元</font>
+					</div>
+					<form v-on:submit.prevent="backtoallpage">
+						<button type="submit" class="btn btn-primary">回到商品瀏覽頁面</button>
+					</form>
+					<br> <a th:href="@{/order}" class="btn btn-outline-success">結帳</a>
+				</div>
+			</div>
+			<div v-if="showModifiedDetailed=== true">
+				<div class="align-middle">
+					<span class="text-danger">欲修改商品</span>
+					<form v-on:submit.prevent="modifyShoppingCart">
+						<table class="table table-striped">
+							<thead class="thead-dark">
+								<tr>
+									<th scope="col">商品圖</th>
+									<th scope="col">名稱</th>
+									<th scope="col">價格</th>
+									<th scope="col">數量</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><img
+										:src="'http://localhost:8080/dessert/dessertPic?id='+shoppinglist.dessert_id"
+										width=300px height=200px></td>
+									<td>{{shoppinglist.dessert_name}}</td>
+									<td>{{shoppinglist.dessert_price}}</td>
+									<td><input type="number" min="1" :max="total_amount"
+										step="1" v-model.number="shoppinglist.dessert_amount">
+										<br> <span><font size="3" color="red">庫存量為{{total_amount}}</font></span>
+
+									</td>
+									<td><button type="submit" class="btn btn-primary">確認修改</button></td>
+								</tr>
+
+							</tbody>
+						</table>
+					</form>
+					<form v-on:submit.prevent="backtoallpage">
+						<button type="submit" class="btn btn-primary">回到商品瀏覽頁面</button>
+					</form>
+					<br>
+
+				</div>
+			</div>
+			<br>
+			<br> <a th:href="@{/backView}" class="btn btn-info">前往後臺管理系統</a>
+		</div>
+
+	</section>
+      <!-- 相關 JS -->
+  <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async defer></script>
+  <script src="/js/vue.js"></script>
+  <script src="/js/axios.min.js"></script>
+  <script src="/js/appDessert.js"></script>
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+</body>
+</html>
