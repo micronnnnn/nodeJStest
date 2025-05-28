@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<title>Users / Profile - NiceAdmin Bootstrap Template</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<!-- Favicons -->
+
+<link href="assets/img/favicon.png" rel="icon">
+<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link
+	href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+	rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="assets/vendor/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
+	rel="stylesheet">
+<link href="assets/vendor/boxicons/css/boxicons.min.css"
+	rel="stylesheet">
+<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="assets/css/style.css" rel="stylesheet">
+
+
+<!-- =======================================================
+  * Template Name: NiceAdmin
+  * Updated: Mar 09 2023 with Bootstrap v5.2.3
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+	<!-- ======= Header ======= -->
+	<header id="header" class="header fixed-top d-flex align-items-center">
+
+		<div class="d-flex align-items-center justify-content-between">
+			<a href="index.html" class="logo d-flex align-items-center"> <span
+				class="d-none d-lg-block">甜點後臺管理系統</span>
+			</a> <i class="bi bi-list toggle-sidebar-btn"></i>
+		</div>
+		<!-- End Logo -->
+
+	</header>
+	<!-- End Header -->
+
+	<!-- ======= Sidebar ======= -->
+	<aside id="sidebar" class="sidebar">
+
+		<ul class="sidebar-nav" id="sidebar-nav">
+
+
+			<li class="nav-item"><a class="nav-link collapsed"
+				data-bs-target="#components-nav" data-bs-toggle="collapse" href="#"><i
+					class="bi bi-menu-button-wide"></i><span>甜點商品</span><i
+					class="bi bi-chevron-down ms-auto"></i> </a>
+				<ul id="components-nav" class="nav-content collapse"
+					data-bs-parent="#sidebar-nav">
+					<li class="nav-item" role="presentation"><a
+						onclick="dessertQuerybackView.initData()" class="nav-link active"
+						aria-selected="true" id="pills-query-tab" data-toggle="pill"
+						aria-controls="pills-query" href="#pills-query" role="tab"> <i
+							class="bi bi-circle"></i><span>查詢甜點</span>
+					</a></li>
+					<li class="nav-item" role="presentation"><a
+						onclick="dessertQuerybackView_add.initData()" id="pills-add-tab"
+						class="nav-link" aria-selected="false" href="#pills-add"
+						data-toggle="pill" aria-controls="pills-add" role="tab"> <i
+							class="bi bi-circle"></i><span>新增品項</span>
+					</a></li>
+					<li class="nav-item" role="presentation"><a
+						onclick="dessertQuerybackView_delete.findAll()"
+						id="pills-delete-tab" class="nav-link" aria-selected="false"
+						href="#pills-delete" data-toggle="pill"
+						aria-controls="pills-delete" role="tab"> <i
+							class="bi bi-circle"></i><span>刪除品項</span>
+					</a></li>
+					<li class="nav-item" role="presentation"><a
+						onclick="dessertQuerybackView_modify.findAll()"
+						id="pills-modify-tab" class="nav-link" aria-selected="false"
+						href="#pills-modify" data-toggle="pill"
+						aria-controls="pills-modify" role="tab"> <i
+							class="bi bi-circle"></i><span>修改品項</span>
+					</a></li>
+
+				</ul></li>
+			<!-- End Components Nav -->
+
+			<li class="nav-item"><a class="test" th:href="@{/orderView}">
+					<i class="bi bi-journal-text"></i><span>訂單</span><i
+					class="bi bi-chevron-down ms-auto"></i>
+			</a></li>
+
+
+			<li class="nav-item"><a class="test"
+				data-bs-target="#tables-nav" th:href="@{/promoteCode}"> <i
+					class="bi bi-layout-text-window-reverse"></i><span>查詢現有優惠代碼</span><i
+					class="bi bi-chevron-down ms-auto"></i>
+			</a></li>
+			<!-- End Tables Nav -->
+			<br>
+
+			<a th:href="@{/backtoView}" class="btn btn-primary">回到前台</a>
+
+		</ul>
+
+	</aside>
+	<!-- End Sidebar-->
+
+	<main id="main" class="main">
+		<section class="section profile">
+			<div class="tab-content" id="pills-tabContent">
+				<div class="tab-pane fade show active" id="pills-query"
+					aria-labelledby="pills-query-tab" role="tabpanel">
+					<div id="appDessertbackView" class="container">
+
+						<!-- 				<div id="appDessertbackView" class="row"> -->
+						<div v-if="showalldessert===false">
+							<!-- 						<div class="col-4"> -->
+							<form v-on:submit.prevent="findAll">
+								<button type="submit" class="btn btn-danger">查詢全部</button>
+							</form>
+							<!-- 						</div> -->
+							<br>
+							<!-- 						<div class="col-8"> -->
+							<form v-on:submit.prevent="findStringData">
+							<span class="text-danger">{{ inputStringErr }}</span><br>
+								<input type="text" v-model="inputString" placeholder="甜點名稱關鍵字"
+									pattern="^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{1,}">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</form>
+							<!-- 						</div> -->
+
+							<form v-on:submit.prevent="findAmountData">
+							<span class="text-danger">{{ numberErr }}</span><br>
+								<input type="number" v-model="inputmaxValue"
+									placeholder="庫存量" pattern="[1-9]{1,}">
+								<button type="submit" class="btn btn-primary">Submit</button>
+								<br> 想找尋最大庫存量小於{{inputmaxValue}}的商品
+							</form>
+
+
+
+						</div>
+						<div v-if="backviewdessert===true && showalldessert===true">
+							<table class="table table-striped">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">ID</th>
+										<th scope="col">甜點名稱</th>
+										<th scope="col">甜點賞味期限</th>
+										<th scope="col">價格</th>
+										<th scope="col">數量</th>
+										<th scope="col">圖片</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="d in dessertList">
+										<td>{{d.dessert_id}}</td>
+										<td>{{d.dessert_name}}</td>
+										<td>{{d.dessert_preserve_date}}</td>
+										<td>{{d.dessert_price}}</td>
+										<td>{{d.dessert_amount}}</td>
+										<td><img :src="'/dessert/dessertPic?id=' + d.dessert_id" width="300px" height="200px" /></td>
+									</tr>
+								</tbody>
+							</table>
+							<button class="btn btn-warning" v-on:click="PreviousPage">回到前一頁</button>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="pills-add"
+					aria-labelledby="pills-add-tab" role="tabpanel">
+					<div id="appDessertbackView_add" class="container">
+						<div v-if="addRes === 0">
+							<form v-on:submit.prevent="uploadData"
+								enctype="multipart/form-data">
+								<div class="form-group row">
+									<label for="inputDessertName" class="col-sm-2 col-form-label">甜點名稱</label><span
+										class="text-danger">{{ dessertNameErr }}</span>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputDessertName"
+											v-model.trim="dessertItem.dessert_name">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertPrice" class="col-sm-2 col-form-label">甜點價格</label><span
+										class="text-danger">{{ dessertpriceErr }}</span>
+									<div class="col-sm-10">
+										<input type="number" class="form-control"
+											id="inputDessertPrice"
+											v-model.trim="dessertItem.dessert_price">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertAmount" class="col-sm-2 col-form-label">甜點數量</label><span
+										class="text-danger">{{ dessertAmountErr }}</span>
+									<div class="col-sm-10">
+										<input type="number" class="form-control"
+											id="inputDessertAmount"
+											v-model.trim="dessertItem.dessert_amount">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertInstruction"
+										class="col-sm-2 col-form-label">甜點說明</label><span
+										class="text-danger">{{ dessertInstructionErr }}</span>
+									<div class="col-sm-10">
+										<input type="text" class="form-control"
+											id="inputDessertInstruction"
+											v-model.trim="dessertItem.dessert_instruction">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertDate" class="col-sm-2 col-form-label">甜點賞味日期</label><span
+										class="text-danger">{{ dessertDateErr }}</span>
+									<div class="col-sm-10">
+										<input type="number" class="form-control"
+											id="inputDessertDate"
+											v-model.trim="dessertItem.dessert_preserve_date">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertInstruction"
+										class="col-sm-2 col-form-label">甜點種類</label><span
+										class="text-danger">{{ dessertTypeErr }}</span>
+									<div class="col-sm-10">
+										<select v-model="dessertItem.dessert_type_id">
+											<option value="1" selected = "selected">蛋糕類</option>
+											<option value="2">西式點心類</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputPic" class="col-sm-2 col-form-label">甜點照片</label><span
+										class="text-danger">{{ dessertPicErr }}</span>
+									<div class="col-sm-10">
+										<input type="file" class="form-control" id="inputPic"
+											v-on:change="getBase64andPreview">
+										<!-- 										不能綁v-model在input type =file屬性中 -->
+										<div v-if="imageRegion==1">
+											上傳後預覽圖<br> <img :src="imageURL" width=400px height=300px>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-10">
+										<button type="submit" class="btn btn-primary">新增</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!-- 						<div v-else-if="addRes=1"> -->
+						<!-- 						新增成功 -->
+
+						<!-- 						</div> -->
+					</div>
+				</div>
+
+				<div class="tab-pane fade" id="pills-delete"
+					aria-labelledby="pills-delete-tab" role="tabpanel">
+					<div id="appDessertbackView_delete" class="container">
+						<table class="table table-striped">
+							<thead class="thead-dark">
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">甜點名稱</th>
+									<th scope="col">甜點賞味期限</th>
+									<th scope="col">價格</th>
+									<th scope="col">數量</th>
+									<th scope="col">圖片</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="d in dessertList">
+									<td>{{d.dessert_id}}</td>
+									<td>{{d.dessert_name}}</td>
+									<td>{{d.dessert_preserve_date}}</td>
+									<td>{{d.dessert_price}}</td>
+									<td>{{d.dessert_amount}}</td>
+									<td><img :src="'/dessert/dessertPic?id=' + d.dessert_id" width="300px" height="200px" /></td>
+									<td><button class="btn btn-danger"
+											v-on:click="deleteDessert(d)">刪除甜點</button></td>
+								</tr>
+							</tbody>
+						</table>
+
+
+					</div>
+				</div>
+
+				<div class="tab-pane fade" id="pills-modify"
+					aria-labelledby="pills-modify-tab" role="tabpanel">
+					<div id="appDessertbackView_modify" class="container">
+					<div v-if="showDetailed===false">
+						<table class="table table-striped">
+							<thead class="thead-dark">
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">甜點名稱</th>
+									<th scope="col">甜點賞味期限</th>
+									<th scope="col">價格</th>
+									<th scope="col">數量</th>
+									<th scope="col">圖片</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="d in dessertList">
+									<td>{{d.dessert_id}}</td>
+									<td>{{d.dessert_name}}</td>
+									<td>{{d.dessert_preserve_date}}</td>
+									<td>{{d.dessert_price}}</td>
+									<td>{{d.dessert_amount}}</td>
+									<td><img :src="'/dessert/dessertPic?id=' + d.dessert_id" width="300px" height="200px" /></td>
+									<td><button class="btn btn-warning"
+											v-on:click="loadDessert(d)">修改甜點</button></td>
+								</tr>
+							</tbody>	
+						</table>
+						</div>
+						<div v-else-if="showDetailed===true">
+						<form v-on:submit.prevent="modifyDessert"
+								enctype="multipart/form-data">
+								<div class="form-group row">
+									<label for="inputDessertName" class="col-sm-2 col-form-label">甜點名稱</label><span
+										class="text-danger">{{ dessertNameErr }}</span>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inputDessertName"
+											v-model.trim="dessertItem.dessert_name">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertPrice" class="col-sm-2 col-form-label">甜點價格</label><span
+										class="text-danger">{{ dessertpriceErr }}</span>
+									<div class="col-sm-10">
+										<input type="number" class="form-control"
+											id="inputDessertPrice"
+											v-model.trim="dessertItem.dessert_price">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertAmount" class="col-sm-2 col-form-label">甜點數量</label><span
+										class="text-danger">{{ dessertAmountErr }}</span>
+									<div class="col-sm-10">
+										<input type="number" class="form-control"
+											id="inputDessertAmount"
+											v-model.trim="dessertItem.dessert_amount">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertInstruction"
+										class="col-sm-2 col-form-label">甜點說明</label><span
+										class="text-danger">{{ dessertInstructionErr }}</span>
+									<div class="col-sm-10">
+										<input type="text" class="form-control"
+											id="inputDessertInstruction"
+											v-model.trim="dessertItem.dessert_instruction">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertDate" class="col-sm-2 col-form-label">甜點賞味日期</label><span
+										class="text-danger">{{ dessertDateErr }}</span>
+									<div class="col-sm-10">
+										<input type="number" class="form-control"
+											id="inputDessertDate"
+											v-model.trim="dessertItem.dessert_preserve_date">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputDessertInstruction"
+										class="col-sm-2 col-form-label">甜點種類</label><span
+										class="text-danger">{{ dessertTypeErr }}</span>
+									<div class="col-sm-10">
+										<select v-model="dessertItem.dessert_type_id">
+											<option selected value="1">蛋糕類</option>
+											<option value="2">西式點心類</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="inputPic" class="col-sm-2 col-form-label">甜點照片</label><span
+										class="text-danger">{{ dessertPicErr }}</span>
+									<div class="col-sm-10">
+										<input type="file" class="form-control" id="inputPic"
+											v-on:change="getBase64andPreview">
+										<!-- 										不能綁v-model在input type =file屬性中 -->
+										<div v-if="imageRegion===1">
+											上傳後預覽圖<br> <img :src="imageURL" width=400px height=300px>
+										</div>
+										<div v-else-if="imageRegion===0">
+										原本圖片<br><img :src="'/dessert/dessertPic?id=' + d.dessert_id" width="300px" height="200px" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-10">
+										<button type="submit" class="btn btn-warning">修改甜點</button>
+									</div>
+								</div>
+							</form>
+						
+						
+						</div>
+					</div>
+				</div>
+		</section>
+
+	</main>
+
+	<a href="#"
+		class="back-to-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>
+
+	<!-- Vendor JS Files -->
+
+	<script th:src="@{/js/vue.js}"></script>
+	<script th:src="@{/js/axios.min.js}"></script>
+	<script th:src="@{/js/showing.js}"></script>
+	<script th:src="@{/js/appDessertbackView.js}"></script>
+	<script th:src="@{/js/appDessertbackView_add.js}"></script>
+	<script th:src="@{/js/appDessertbackView_delete.js}"></script>
+	<script th:src="@{/js/appDessertbackView_modify.js}"></script>
+	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.js"></script>
+	<script type="text/javascript"
+		src="webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+	<script src="assets/vendor/chart.js/chart.umd.js"></script>
+	<script src="assets/vendor/echarts/echarts.min.js"></script>
+	<script src="assets/vendor/quill/quill.min.js"></script>
+	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+	<script src="assets/vendor/php-email-form/validate.js"></script>
+
+	<!-- Template Main JS File -->
+	<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet"
+	href="webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
+<title>MVVM Dessert Test</title>
+<style>
+.text-danger {
+	color: #dc3545 !important;
+	font-size: 2em;
+}
+
+table tbody tr td.r-o {
+	width: 120px;
+	color: #707079;
+}
+
+.room-item .ri-text {
+	border: 1px solid #ebebeb;
+	border-top: none;
+	padding: 24px 24px 30px 28px;
+}
+</style>
+</head>
+<body>
+	<section class="rooms-section spad">
+		<div id="appDessertOrder" class="container">
+			<br> <br>
+			<h2>您的訂單內容為</h2>
+			<table class="table table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">名稱</th>
+						<th scope="col">價格</th>
+						<th scope="col">數量</th>
+						<th scope="col">小計</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="d in all_shoppinglist">
+						<td>{{d.dessert_name}}</td>
+						<td>{{d.dessert_price}}</td>
+						<td>{{d.dessert_amount}}</td>
+						<td>{{d.subtotal}}</td>
+						<td></td>
+					</tr>
+					<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td><input
+								type="text" class="form-control" id="input_promotecode"
+								placeholder="請輸入優惠代碼" v-model.trim="promoteCode"></td>
+					<td><font id="total" color="red" size="5">已折價{{difference_pirce}}元</font></td>
+					</tr>
+					<tr>
+					<td></td>
+						<td><span
+									class="text-danger">{{ promoteErr }}</span></td>
+						<td></td>
+						<td></td>
+						<td><font id="total" color="red" size="5">總價格為{{total}}元</font></td>
+						
+					</tr>
+				</tbody>
+			</table>
+			<a th:href="@{/backtoView}" class="btn btn-success">回到商品瀏覽</a> <br>
+			<br>
+
+			<div class="row">
+				<div class="col-12 col-lg-6 py-3">
+					<h2>填寫訂單聯絡資訊</h2>
+					<form v-on:submit.prevent="checkout">
+						<div class="col-12">
+							<label for="validationCustom01" class="form-label">姓名</label> <input
+								type="text" class="form-control" id="input_name"
+								placeholder="請輸入姓名" v-model.trim="order.customer_name">
+								<span class="text-danger">{{ customer_nameError }}</span>
+						</div>
+						<div class="col-12">
+							<label for="validationCustom02" class="form-label">電話</label> <input
+								type="tel" class="form-control" id="input_tel"
+								placeholder="請輸入電話" v-model.trim="order.customer_phone">
+								<span class="text-danger">{{ customer_phoneError }}</span>
+						</div>
+						<div class="col-12">
+							<label for="validationCustom03" class="form-label">電子信箱</label> <input
+								type="email" class="form-control" id="input_email"
+								name="input_email" placeholder="請輸入電子信箱"
+								v-model.trim="order.customer_email">
+								<span class="text-danger">{{ customer_emailError }}</span>
+						</div>
+						<div class="col-12">
+							<label for="validationCustom03" class="form-label">地址</label> <input
+								type="text" class="form-control" id="input_address"
+								placeholder="請輸入地址" v-model.trim="order.customer_address">
+								<span class="text-danger">{{ customer_addressError }}</span>
+						</div>
+						<br>
+						<div class="col-12">
+							<button class="btn btn-primary sub_btn" type="submit">送出</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="line-it-button" data-lang="zh_Hant" data-type="friend"
+				data-env="REAL" data-count="true" data-lineId="@148skkmm"
+				style="display: none;"></div>
+
+		</div>
+	</section>
+	<script th:src="@{/js/vue.js}"></script>
+	<script th:src="@{/js/axios.min.js}"></script>
+	<script th:src="@{/js/appDessertOrder.js}"></script>
+	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.js"></script>
+	<script type="text/javascript"
+		src="webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+</body>
+</html>

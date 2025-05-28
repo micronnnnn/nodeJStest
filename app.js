@@ -41,6 +41,10 @@ app.use('/dessert', dessertRouter); // 加上路徑前綴
 app.use('/dessert', shoppingCartRouter); // 加上路徑前綴
 app.use('/dessertPic', picRouter); // 加上路徑前綴
 
+app.get('/backView', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'backView', 'dessert.html'));
+});
+
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
 });

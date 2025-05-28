@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<title>Users / Profile - NiceAdmin Bootstrap Template</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<!-- Favicons -->
+<link href="assets/img/favicon.png" rel="icon">
+<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link
+	href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+	rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="assets/vendor/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
+	rel="stylesheet">
+<link href="assets/vendor/boxicons/css/boxicons.min.css"
+	rel="stylesheet">
+<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="assets/css/style.css" rel="stylesheet">
+
+<!-- =======================================================
+  * Template Name: NiceAdmin
+  * Updated: Mar 09 2023 with Bootstrap v5.2.3
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+	<!-- ======= Header ======= -->
+	<header id="header" class="header fixed-top d-flex align-items-center">
+
+		<div class="d-flex align-items-center justify-content-between">
+			<a href="index.html" class="logo d-flex align-items-center"> <span
+				class="d-none d-lg-block">甜點後臺管理系統</span>
+			</a> <i class="bi bi-list toggle-sidebar-btn"></i>
+		</div>
+		<!-- End Logo -->
+
+	</header>
+	<!-- End Header -->
+
+	<!-- ======= Sidebar ======= -->
+	<aside id="sidebar" class="sidebar">
+
+		<ul class="sidebar-nav" id="sidebar-nav">
+
+
+			<li class="nav-item"><a class="test" th:href="@{/dessertView}">
+					<i class="bi bi-menu-button-wide"></i><span>甜點商品</span><i
+					class="bi bi-chevron-down ms-auto"></i>
+			</a></li>
+			<!-- End Components Nav -->
+
+			<li class="nav-item"><a class="test" th:href="@{/orderView}">
+					<i class="bi bi-journal-text"></i><span>訂單</span><i
+					class="bi bi-chevron-down ms-auto"></i>
+			</a></li>
+			<!-- End Forms Nav -->
+
+			<li class="nav-item"><a class="nav-link collapsed"
+				data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+					<i class="bi bi-layout-text-window-reverse"></i><span>優惠代碼</span><i
+					class="bi bi-chevron-down ms-auto"></i>
+			</a>
+				<ul id="tables-nav" class="nav-content collapse "
+					data-bs-parent="#sidebar-nav">
+					<li class="nav-item" role="presentation"><a
+						onclick="PromoteCode.findPromoteCode()" class="nav-link active"
+						aria-selected="true" id="pills-query-tab" data-toggle="pill"
+						aria-controls="pills-query" href="#pills-query" role="tab"> <i
+							class="bi bi-circle"></i><span>查詢可使用優惠代碼</span>
+					</a></li>
+					<li class="nav-item" role="presentation"><a
+						onclick="PromteListAdd.findAllPromoteProject()"
+						class="nav-link" aria-selected="true" id="pills-addlist-tab"
+						data-toggle="pill" aria-controls="pills-addlist"
+						href="#pills-addlist" role="tab"> <i class="bi bi-circle"></i><span>新增折扣專案(多數量)</span>
+					</a></li>
+				</ul></li>
+			<!-- End Tables Nav -->
+			<br>
+
+			<a th:href="@{/backtoView}" class="btn btn-primary">回到前台</a>
+
+		</ul>
+
+	</aside>
+	<!-- End Sidebar-->
+
+	<main id="main" class="main">
+		<section class="section profile">
+			<div class="tab-content" id="pills-tabContent">
+				<div class="tab-pane fade show active" id="pills-query"
+					aria-labelledby="pills-query-tab" role="tabpanel">
+					<div id="appPromoteCode" class="row">
+						<table class="table table-striped">
+							<thead class="thead-dark">
+								<tr>
+									<th scope="col">優惠代碼</th>
+									<th scope="col">折扣數</th>
+									<th scope="col">剩餘多久時間</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="p in promoteCodeList">
+									<td>{{p.promoteCode}}</td>
+									<td>{{p.promoteValue}}</td>
+									<td>{{p.last_time}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="pills-addlist"
+					aria-labelledby="pills-addlist-tab" role="tabpanel">
+					<div id="appPromoteListAdd" class="row">
+						<form v-on:submit.prevent="addPromteDetailed">
+							<div class="form-group row">
+								<label for="inputPromoteName" class="col-sm-2 col-form-label">促銷方案名稱</label>
+								<div class="col-sm-10">
+									<select v-model="onepromoteItem.promotelist_date_id">
+										<option v-for="p in projectList" :value="p.promotelist_date_id">{{p.promotelist_instruction}}</option>
+									</select>
+								</div>
+								<!-- 						適用日期為 {{promoteDate.promotelist_start_date}}到{{promoteDate.promotelist_end_date}} -->
+							</div>
+							<div class="form-group row">
+								<label for="inputPromoteDessertName"
+									class="col-sm-2 col-form-label">促銷方案甜點名稱</label>
+								<div class="col-sm-10">
+									<select v-model="onepromoteItem.promoteDessert">
+										<option v-for="d in dessertList" :value="d.dessert_id">{{d.dessert_name}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="inputPromoteDessertAmount"
+									class="col-sm-2 col-form-label">促銷方案達成數量</label>
+								<div class="col-sm-10">
+									<input type="number" class="form-control"
+										id="inputPromoteDessertAmount"
+										v-model.trim="onepromoteItem.promoteAmount">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="inputPromoteDessertDiscount"
+									class="col-sm-2 col-form-label">促銷方案送幾個數</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control"
+										id="inputPromoteDessertDiscount"
+										v-model.trim="onepromoteItem.promoteDiscount">
+								</div>
+							</div>
+							<br><br>
+							<div>
+							專案名稱是{{onepromoteItem.promotelist_date_id}}
+							<br>
+							商品ID是{{onepromoteItem.promoteDessert}}
+							<br>
+							總數量{{onepromoteItem.promoteAmount}}個
+							<br>
+							會有送{{onepromoteItem.promoteDiscount}}個的優惠
+							</div>
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+		</section>
+	</main>
+
+
+	<a href="#"
+		class="back-to-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>
+
+	<!-- Vendor JS Files -->
+	<script th:src="@{/js/vue.js}"></script>
+	<script th:src="@{/js/axios.min.js}"></script>
+	<script th:src="@{/js/showing.js}"></script>
+	<script th:src="@{/js/appPromoteCode.js}"></script>
+	<script th:src="@{/js/appPromoteListAdd.js}"></script>
+	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/vendor/chart.js/chart.umd.js"></script>
+	<script src="assets/vendor/echarts/echarts.min.js"></script>
+	<script src="assets/vendor/quill/quill.min.js"></script>
+	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+	<script src="assets/vendor/php-email-form/validate.js"></script>
+
+	<!-- Template Main JS File -->
+	<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
