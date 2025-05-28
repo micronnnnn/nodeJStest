@@ -36,13 +36,21 @@ app.use(express.json());
 const dessertRouter = require('./routes/dessertRoute'); // 看你的檔名位置
 const picRouter = require('./routes/dessertPicRoute');
 const shoppingCartRouter = require('./routes/shoppingCartRoute');
+const promoteRoute = require('./routes/promoteRoute');
 
 app.use('/dessert', dessertRouter); // 加上路徑前綴
 app.use('/dessert', shoppingCartRouter); // 加上路徑前綴
+app.use('/dessert', promoteRoute); // 加上路徑前綴
 app.use('/dessertPic', picRouter); // 加上路徑前綴
 
 app.get('/backView', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'backView', 'dessert.html'));
+});
+app.get('/orderView', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'backView', 'order.html'));
+});
+app.get('/promoteView', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'backView', 'promotcode.html'));
 });
 
 app.listen(3000, () => {

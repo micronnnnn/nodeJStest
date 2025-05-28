@@ -6,7 +6,7 @@ const redis = new Redis({
   host: '127.0.0.1', // 或你的 Redis 主機位置
   port: 6379,
   password: '',      // 如果有密碼可以填上
-  db: 3              // 使用第幾個 Redis 資料庫（預設為 0）
+  db: 2              // 使用第幾個 Redis 資料庫（預設為 0）
 });
 
 redis.on('connect', () => {
