@@ -30,12 +30,15 @@ const path = require('path');
 
 // 靜態資源路徑（提供 public 裡的檔案）
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 
 // 匯入並使用你的 router
 const dessertRouter = require('./routes/dessertRoute'); // 看你的檔名位置
 const picRouter = require('./routes/dessertPicRoute');
+const shoppingCartRouter = require('./routes/shoppingCartRoute');
 
 app.use('/dessert', dessertRouter); // 加上路徑前綴
+app.use('/dessert', shoppingCartRouter); // 加上路徑前綴
 app.use('/dessertPic', picRouter); // 加上路徑前綴
 
 app.listen(3000, () => {

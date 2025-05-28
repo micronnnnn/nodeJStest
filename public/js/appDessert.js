@@ -47,10 +47,10 @@ let dessertQuery = new Vue({
             _this.all_shoppinglist=response.data; // current_page good
             sessionStorage.setItem("all_shoppinglist",JSON.stringify(_this.all_shoppinglist));
                   // 設定 1 分鐘後過期時間
-      const expiryTimestamp = Date.now() + (_this.sessionExpiryMinutes * 60000);
-      sessionStorage.setItem("all_shoppinglist_expiry", expiryTimestamp);
+            const expiryTimestamp = Date.now() + (_this.sessionExpiryMinutes * 60000);
+            sessionStorage.setItem("all_shoppinglist_expiry", expiryTimestamp);
                   // 開始計時，每分鐘清除 sessionStorage 中的購物車資料
-     	 _this.startSessionCleaner(); 
+     	      _this.startSessionCleaner(); 
             alert("新增成功");
             }
         }).catch(function(error){
@@ -58,6 +58,7 @@ let dessertQuery = new Vue({
            alert("新增失敗")
         });
       },
+      
       removeShoppingCart: function(data){
         let _this=this;
         axios.post('/dessert/removeShoppingCart',{
