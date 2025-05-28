@@ -11,8 +11,8 @@
 
 <!-- Favicons -->
 
-<link href="assets/img/favicon.png" rel="icon">
-<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+<link href="/assets/img/favicon.png" rel="icon">
+<link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
 <!-- Google Fonts -->
 <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -21,19 +21,19 @@
 	rel="stylesheet">
 
 <!-- Vendor CSS Files -->
-<link href="assets/vendor/bootstrap/css/bootstrap.min.css"
+<link href="/assets/vendor/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
-<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
+<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css"
 	rel="stylesheet">
-<link href="assets/vendor/boxicons/css/boxicons.min.css"
+<link href="/assets/vendor/boxicons/css/boxicons.min.css"
 	rel="stylesheet">
-<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+<link href="/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="/assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
 <!-- Template Main CSS File -->
-<link href="assets/css/style.css" rel="stylesheet">
+<link href="/assets/css/style.css" rel="stylesheet">
 
 
 <!-- =======================================================
@@ -51,7 +51,7 @@
 	<header id="header" class="header fixed-top d-flex align-items-center">
 
 		<div class="d-flex align-items-center justify-content-between">
-			<a href="index.html" class="logo d-flex align-items-center"> <span
+			<a href="/index.html" class="logo d-flex align-items-center"> <span
 				class="d-none d-lg-block">甜點後臺管理系統</span>
 			</a> <i class="bi bi-list toggle-sidebar-btn"></i>
 		</div>
@@ -177,7 +177,7 @@
 										<td>{{d.dessert_preserve_date}}</td>
 										<td>{{d.dessert_price}}</td>
 										<td>{{d.dessert_amount}}</td>
-										<td><img :src="'/dessert/dessertPic?id=' + d.dessert_id" width="300px" height="200px" /></td>
+										<td><img :src="'/dessertPic?id=' + d.dessert_id" width="300px" height="200px" /></td>
 									</tr>
 								</tbody>
 							</table>
@@ -431,27 +431,26 @@
 
 	<!-- Vendor JS Files -->
 
-	<script th:src="@{/js/vue.js}"></script>
-	<script th:src="@{/js/axios.min.js}"></script>
-	<script th:src="@{/js/showing.js}"></script>
-	<script th:src="@{/js/appDessertbackView.js}"></script>
-	<script th:src="@{/js/appDessertbackView_add.js}"></script>
-	<script th:src="@{/js/appDessertbackView_delete.js}"></script>
-	<script th:src="@{/js/appDessertbackView_modify.js}"></script>
-	<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script type="text/javascript" src="webjars/jquery/3.5.1/jquery.js"></script>
-	<script type="text/javascript"
-		src="webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
-	<script src="assets/vendor/chart.js/chart.umd.js"></script>
-	<script src="assets/vendor/echarts/echarts.min.js"></script>
-	<script src="assets/vendor/quill/quill.min.js"></script>
-	<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-	<script src="assets/vendor/tinymce/tinymce.min.js"></script>
-	<script src="assets/vendor/php-email-form/validate.js"></script>
+	<script src="/js/vue.js"></script>
+	<script src="/js/axios.min.js"></script>
+	<script src="/js/showing.js"></script>
+	<script src="/js/appDessertbackView.js"></script>
+	<script src="/js/appDessertbackView_add.js"></script>
+	<script src="/js/appDessertbackView_delete.js"></script>
+	<script src="/js/appDessertbackView_modify.js"></script>
+	<script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
+	<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-3.5.1.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/assets/vendor/chart.js/chart.umd.js"></script>
+	<script src="/assets/vendor/echarts/echarts.min.js"></script>
+	<script src="/assets/vendor/quill/quill.min.js"></script>
+	<script src="/assets/vendor/simple-datatables/simple-datatables.js"></script>
+	<script src="/assets/vendor/tinymce/tinymce.min.js"></script>
+	<script src="/assets/vendor/php-email-form/validate.js"></script>
 
 	<!-- Template Main JS File -->
-	<script src="assets/js/main.js"></script>
+	<script src="/assets/js/main.js"></script>
 
 </body>
 
