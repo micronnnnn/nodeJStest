@@ -95,4 +95,56 @@ router.post('/AllPromoteProject', async (req, res) => {
   }
 });
 
+// POST /promoteCodeQuery
+router.post('/promoteCodeQuery', async (req, res) => {
+  try {
+    await redis.select(3);
+    const data = await getAllPromoteCodes();
+    res.json(data);
+  } catch (err) {
+    console.error('查詢優惠碼失敗:', err);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// 格式化時間函數
+function formatTime(seconds) {
+  const oneday = 24 * 60 * 60;
+  const onehour = 60 * 60;
+  const onemin = 60;
+
+  const days = Math.floor(seconds / oneday);
+  const hours = Math.floor((seconds % oneday) / onehour);
+  const mins = Math.floor(((seconds % oneday) % onehour) / onemin);
+  const sec = ((seconds % oneday) % onehour) % onemin;
+
+  let result = '';
+  if (days) result += `${days}天`;
+  if (hours) result += `${hours}小時`;
+  if (mins) result += `${mins}分鐘`;
+  if (sec) result += `${sec}秒`;
+  return result || '0秒';
+}
+
+// 主函數
+async function getAllPromoteCodes() {
+  await redis.select(3);
+  const keys = await redis.keys('*'); // 取得所有 key
+  const result = [];
+
+  for (const key of keys) {
+    const value = await redis.get(key);
+    const ttl = await redis.ttl(key); // 剩餘有效秒數
+
+    result.push({
+      promoteCode: key,
+      promoteValue: value,
+      last_time: formatTime(ttl),
+    });
+  }
+
+  return result;
+}
+
 module.exports = router;

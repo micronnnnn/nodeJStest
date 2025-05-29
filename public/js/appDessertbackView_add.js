@@ -55,7 +55,9 @@ let dessertQuerybackView_add = new Vue({
       const _fileReader = new FileReader();
       _fileReader.readAsDataURL(file);
       _fileReader.onload = function(e) {
-          imageresult=e.target.result.substring(5,10)==="image";
+
+          imageresult = e.target.result.startsWith("data:image");
+          // imageresult=e.target.result.substring(5,10)==="image";
           _self.imageURL=e.target.result;
           if(imageresult){
           _self.dessertPicErr='';

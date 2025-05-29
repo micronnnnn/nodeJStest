@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
-const Redis = require('ioredis');
-const redis = new Redis(); // 預設連到 localhost:6379
+const redis = require('../config/redis'); // 改成用你自己的 redis 實例
 
 const LINE_ACCESS_TOKEN = 'Bb/ZHI26xjIzqAauYqFwiTN+YgTPkhMlty/JOy1EvP6LYJ8wJTNtKjccO/BLyMNbA01Z3hzSzpFi5AoWnad/f+WJaJRDDZY1WpZDj/egbncNhpm6t+CitNAA5KDmCvZ/dSH0JI4TFo6GLot7pUAjZwdB04t89/1O/w1cDnyilFU=';
 
@@ -72,6 +71,7 @@ router.post('/linebottest', async (req, res) => {
       const discountRate = (discount / 100).toFixed(2);
 
       // 存入 Redis，有效期3天
+      await redis.select(3);
       await redis.set(code, discountRate);
       await redis.expire(code, 3 * 24 * 60 * 60); // 3天
 
