@@ -1,5 +1,6 @@
+const { sequelize } = require('../config/database'); // 路徑依照實際位置修改
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+// const sequelize = require('../config/database');
 
 const Dessert = sequelize.define('Dessert', {
   dessert_id: {

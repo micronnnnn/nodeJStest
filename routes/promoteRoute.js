@@ -13,8 +13,8 @@ router.post('/findCurrentPromoteProject', async (req, res) => {
 
     // 找出目前進行中的促銷案
     const currentPromote = promoteList.find(promote =>
-      dayjs(promote.promotestart_time).isBefore(now) &&
-      dayjs(promote.promoteend_time).isAfter(now)
+      dayjs(promote.promoStartDate).isBefore(now) &&
+      dayjs(promote.promoEndDate).isAfter(now)
     );
 
     if (!currentPromote) {
@@ -23,10 +23,10 @@ router.post('/findCurrentPromoteProject', async (req, res) => {
 
     const formatter = 'YYYY-MM-DD HH:mm:ss';
     const promoteInfo = {
-      promotelist_date_id: currentPromote.pomotelist_date_id,
-      promotelist_start_date: dayjs(currentPromote.promotestart_time).format(formatter),
-      promotelist_end_date: dayjs(currentPromote.promoteend_time).format(formatter),
-      promotelist_instruction: currentPromote.promote_instruction,
+      promotelist_date_id: currentPromote.promoListId,
+      promotelist_start_date: dayjs(currentPromote.promoStartDate).format(formatter),
+      promotelist_end_date: dayjs(currentPromote.promoEndDate).format(formatter),
+      promotelist_instruction: currentPromote.promoInstruction,
     };
 
     const redisData = await redis.hgetall(String(promoteInfo.promotelist_date_id));
@@ -69,6 +69,28 @@ router.post('/addPromteDetailed', async (req, res) => {
     res.end(); // ✅ 不回傳內容，只結束回應
   } catch (error) {
     console.error('❌ 發生錯誤:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+// POST /AllPromoteProject
+router.post('/AllPromoteProject', async (req, res) => {
+  try {
+    // 撈出全部促銷資料
+    const promoteList = await PromoteList.findAll();
+
+    // 轉成前端要的格式
+    const result = promoteList.map(p => ({
+      promotelist_date_id   : p.promoListId,
+      promotelist_start_date: dayjs(p.promoStartDate).format('YYYY-MM-DD HH:mm:ss'),
+      promotelist_end_date  : dayjs(p.promoEndDate).format('YYYY-MM-DD HH:mm:ss'),
+      promotelist_instruction: p.promoInstruction
+    }));
+
+    // 直接回傳 JSON（前端更好處理）
+    res.json(result);
+  } catch (err) {
+    console.error('讀取促銷專案失敗：', err);
     res.status(500).send('Server error');
   }
 });
