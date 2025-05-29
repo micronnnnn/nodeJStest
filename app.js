@@ -37,11 +37,13 @@ const dessertRouter = require('./routes/dessertRoute'); // 看你的檔名位置
 const picRouter = require('./routes/dessertPicRoute');
 const shoppingCartRouter = require('./routes/shoppingCartRoute');
 const promoteRoute = require('./routes/promoteRoute');
+const lineBotRoute = require('./routes/lineBotRoute');
 
 app.use('/dessert', dessertRouter); // 加上路徑前綴
 app.use('/dessert', shoppingCartRouter); // 加上路徑前綴
 app.use('/dessert', promoteRoute); // 加上路徑前綴
 app.use('/dessertPic', picRouter); // 加上路徑前綴
+app.use('/', lineBotRoute); // 加上路徑前綴
 
 app.get('/backView', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'backView', 'dessert.html'));
