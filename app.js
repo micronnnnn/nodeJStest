@@ -56,6 +56,12 @@ app.get('/orderView', (req, res) => {
 app.get('/promoteView', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'backView', 'promotcode.html'));
 });
+app.get('/frontView', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+app.get('/checkoutView', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'frontView', 'order.html'));
+});
 
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');

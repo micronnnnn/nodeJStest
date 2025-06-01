@@ -107,6 +107,23 @@ router.post('/promoteCodeQuery', async (req, res) => {
   }
 });
 
+//POST /getPromoteCode
+router.post('/promoteCode', async (req, res) => {
+  try {
+    const promoCode = req.body.promoteCode;
+    await redis.select(3);
+    const data = await redis.get(promoCode);
+        if (data === null) {
+      return res.status(404).send('查無此優惠碼');
+    }
+
+    res.send(data.toString());
+  } catch (err) {
+    console.error('查詢優惠碼失敗:', err);
+    res.status(500).send('Server Error');
+  }
+});
+
 
 // 格式化時間函數
 function formatTime(seconds) {

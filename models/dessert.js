@@ -72,7 +72,7 @@ const Dessert = sequelize.define('Dessert', {
   },
   dessert_pic: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     // 你可以自訂一個 validator 來驗證圖片格式
     field: 'DESSERT_IMG',
   },

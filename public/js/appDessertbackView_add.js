@@ -66,7 +66,10 @@ let dessertQuerybackView_add = new Vue({
             _self.imageRegion=0;
             _self.dessertPicErr="請確認上傳圖片格式"
           } 
-          _self.dessertItem.dessertpic = e.target.result;
+          _self.dessertItem.dessertpic = e.target.result.split(',')[1];
+          console.log('Base64純圖內容：', _self.dessertItem.dessertpic);
+
+          
       }
 
     },

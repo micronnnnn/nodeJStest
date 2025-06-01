@@ -21,12 +21,21 @@ router.post('/dessertAdd',
   async (req, res) => {
     const errors = validationResult(req);
     const dessertItem = req.body.dessertItem;
+    console.log("dessertItem", dessertItem);
 
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     try {
+
+
+           // ✅ 圖片：Base64 轉 Buffer（若有值）
+      let dessertPicBuffer = null;
+      if (dessertItem.dessertpic) {
+        dessertPicBuffer = Buffer.from(dessertItem.dessertpic, 'base64');
+      }
+      console.log("testtt", dessertPicBuffer);
       const newDessert = await Dessert.create({
         dessert_preserve_date: dessertItem.dessert_preserve_date || 0,
         dessert_type_id: dessertItem.dessert_type_id || 0,
@@ -36,7 +45,7 @@ router.post('/dessertAdd',
         dessert_instruction: dessertItem.dessert_instruction || null,
         dessert_total_score: dessertItem.dessert_total_score || 0,
         dessert_total_people: dessertItem.dessert_total_people || 0,
-        dessert_pic: dessertItem.dessertpic || null,
+        dessert_pic: dessertPicBuffer,
       });
       
       return res.send("新增成功");
