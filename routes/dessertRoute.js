@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Dessert = require('../models/dessert'); // 直接引入單一 Model
+const { body, validationResult } = require('express-validator');
 
 router.post('/dessertQuery', async (req, res) => {
   try {
@@ -37,8 +38,9 @@ router.post('/dessertAdd',
         dessert_total_people: dessertItem.dessert_total_people || 0,
         dessert_pic: dessertItem.dessertpic || null,
       });
+      
+      return res.send("新增成功");
 
-      return res.json({ success: true, dessertId: newDessert.id });
     } catch (error) {
       console.error('資料新增失敗', error);
       return res.status(500).json({ error: '新增甜點時發生錯誤' });

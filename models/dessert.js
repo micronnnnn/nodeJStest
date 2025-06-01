@@ -74,10 +74,6 @@ const Dessert = sequelize.define('Dessert', {
     type: DataTypes.STRING,
     allowNull: false,
     // 你可以自訂一個 validator 來驗證圖片格式
-    validate: {
-      isUrl: true, // 假設是網址
-      // 或自行寫正則驗證副檔名...
-    },
     field: 'DESSERT_IMG',
   },
 }, {

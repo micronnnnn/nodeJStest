@@ -29,8 +29,10 @@ const app = express();
 const path = require('path');
 
 // 靜態資源路徑（提供 public 裡的檔案）
+// 這樣就允許最大傳入 10MB 的 JSON 或表單資料，非常適合你上傳圖片（base64 格式）用。
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // 匯入並使用你的 router
 const dessertRouter = require('./routes/dessertRoute'); // 看你的檔名位置

@@ -39,7 +39,7 @@ let dessertQuerybackView_add = new Vue({
             alert("後端驗證from springboot     "+"\r"+_this.errorMsg);
            }else{
             alert(response.data);
-            window.location="/dessert/backView"; //Window.location only accept post request
+            window.location="/backView"; //Window.location only accept post request
            }
 		  }).catch(function(error){
 			 console.log(error); 
