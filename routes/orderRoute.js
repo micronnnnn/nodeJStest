@@ -5,7 +5,114 @@ const dessertOrderItem = require('../models/orderItem'); // 直接引入單一 M
 const Dessert = require('../models/dessert'); // 直接引入單一 Model
 const  { sendMail }  = require('../utility/mail'); // 直接引入單一 Model
 const dayjs = require('dayjs');
+const ExcelJS = require('exceljs');
 
+
+
+//post // getorderdetailed
+// 查詢指定訂單的明細
+router.post('/getOrderDetailed', async (req, res) => {
+  try {
+    const orderId = req.body.order?.dessertOrderId;
+
+    if (!orderId) {
+      return res.status(400).json({ error: '缺少 order.dessert_order_id' });
+    }
+
+    // 查詢該訂單的所有甜點項目
+    const orderItems = await dessertOrderItem.findAll({
+      where: { dessertOrderId: orderId },
+    });
+
+    const result = [];
+
+    for (const item of orderItems) {
+      const dessert = await Dessert.findByPk(item.dessert_id); // 查 dessert name
+
+      result.push({
+        dessert_id: item.dessert_id,
+        dessert_name: dessert?.dessert_name || '未知甜點',
+        dessert_amout: item.amount,
+        dessert_price: item.dessert_price,
+        subtotal: item.amount * item.dessert_price,
+        dessert_deadline: dayjs(item.dessert_deadline).format('YYYY-MM-DD HH:mm:ss'),
+      });
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error('❌ 發生錯誤:', err);
+    res.status(500).json({ error: '伺服器錯誤' });
+  }
+});
+
+//post//download
+router.post('/download', async (req, res) => {
+  try {
+    // 建立工作簿與工作表
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('訂單明細');
+
+    // 加入標題列
+    worksheet.columns = [
+      { header: '甜點名稱', key: 'dessert_name', width: 20 },
+      { header: '數量', key: 'dessert_amout', width: 10 },
+      { header: '單價', key: 'dessert_price', width: 10 },
+      { header: '小計', key: 'subtotal', width: 15 },
+      { header: '保存期限', key: 'dessert_deadline', width: 20 }
+    ];
+
+const orderId = req.body.order?.dessertOrderId;
+
+    if (!orderId) {
+      return res.status(400).json({ error: '缺少 order.dessert_order_id' });
+    }
+
+    // 查詢該訂單的所有甜點項目
+    const orderItems = await dessertOrderItem.findAll({
+      where: { dessertOrderId: orderId },
+    });
+
+    const result = [];
+
+    for (const item of orderItems) {
+      const dessert = await Dessert.findByPk(item.dessert_id); // 查 dessert name
+
+      result.push({
+        dessert_name: dessert?.dessert_name || '未知甜點',
+        dessert_amout: item.amount,
+        dessert_price: item.dessert_price,
+        subtotal: item.amount * item.dessert_price,
+        dessert_deadline: dayjs(item.dessert_deadline).format('YYYY-MM-DD HH:mm:ss'),
+      });
+    }
+
+    // 將資料加到工作表
+    result.forEach(item => worksheet.addRow(item));
+
+    // 設定檔案 headers
+    // res.setHeader(
+    //   'Content-Type',
+    //   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    // );
+    // res.setHeader(
+    //   'Content-Disposition',
+    //   'attachment; filename="order_detail.xlsx"'
+    // );
+    const fileName = encodeURIComponent('order_detail.xlsx');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${fileName}`);
+
+
+    // 寫入 Excel 並傳給前端
+    await workbook.xlsx.write(res);
+    res.end();
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Excel 產生失敗');
+  }
+});
 
 //post//checkout
 
@@ -26,12 +133,15 @@ router.post('/checkout', async (req, res) => {
     });
     const orderId =newOrder.dessertOrderId;
     const time =dayjs(newOrder.orderDate).format('YYYY-MM-DD HH:mm:ss');
-
+    let lines = [];
+    lines.push(`親愛的 ${order.customer_name}，您的訂單已成立！`);
     for (let i = 0; i < all_shoppinglist.length; i++) {
       const oneItem = all_shoppinglist[i];
       const dessertId = oneItem.dessert_id;
       const amount = oneItem.dessert_amount;
+      const dessertname = oneItem.dessert_name;
       const dessertPrice = oneItem.dessert_price;
+      const subtotal=oneItem.subtotal;
 
   // 1. 查甜點的 dessert_preserve_date（天數）
         const dessertData = await Dessert.findByPk(dessertId);
@@ -48,12 +158,18 @@ router.post('/checkout', async (req, res) => {
     dessert_price: dessertData.dessert_price,
     dessert_deadline: preserveTime, // 假設 DB 欄位是 timestamp
     });
-    }
 
+    //4. 寫明細內容
+    lines.push(
+    `甜點名稱: ${dessertname}, 單價=${dessertPrice}, 小計=${subtotal}, 數量=${amount}, 保存期限=${preserveTime}`
+    );    
+  }
+
+    lines.push(`共 ${total} 元`);
     await sendMail({
       to: order.customer_email,
-      subject: `親愛的 ${order.customer_name}，您的訂單已成立！`,
-      text: "test",
+      subject: `訂單通知`,
+      text: lines.join('\n'),
     });
 
     res.send("訂單成立");

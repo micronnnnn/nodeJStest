@@ -155,8 +155,8 @@
 										<td>{{d.dessertOrderId}}</td>
 										<td>{{d.orderDate}}</td>
 										<td>{{d.total}}</td>
-										<td>{{d.customer_name}}</td>
-										<td>{{d.customer_phone}}</td>
+										<td>{{d.customerName}}</td>
+										<td>{{d.customerPhone}}</td>
 										<td><button class="btn btn-info"
 												v-on:click="loadOrder(d)">訂單詳情</button></td>
 										<td><button class="btn btn-link"
@@ -181,7 +181,7 @@
 								<tbody>
 									<tr v-for="d in orderItemList">
 										<td><img
-											:src="'http://localhost:8080/dessert/dessertPic?id='+d.dessert_id"
+											:src="'http://localhost:3000/dessertPic?id='+d.dessert_id"
 											width=300px height=200px></td>
 										<td>{{d.dessert_name}}</td>
 										<td>{{d.dessert_price}}</td>
