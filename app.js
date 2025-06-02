@@ -40,12 +40,14 @@ const picRouter = require('./routes/dessertPicRoute');
 const shoppingCartRouter = require('./routes/shoppingCartRoute');
 const promoteRoute = require('./routes/promoteRoute');
 const lineBotRoute = require('./routes/lineBotRoute');
+const orderRoute = require('./routes/orderRoute');
 
 app.use('/dessert', dessertRouter); // 加上路徑前綴
 app.use('/dessert', shoppingCartRouter); // 加上路徑前綴
 app.use('/dessert', promoteRoute); // 加上路徑前綴
 app.use('/dessertPic', picRouter); // 加上路徑前綴
 app.use('/', lineBotRoute); // 加上路徑前綴
+app.use('/dessert', orderRoute); // 加上路徑前綴
 
 app.get('/backView', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'backView', 'dessert.html'));

@@ -28,7 +28,7 @@ methods:{
             if(response.data==="訂單成立"){
             alert("訂單已成立"); 
             sessionStorage.removeItem("all_shoppinglist");
-            window.location="/dessert";// why modelAndView no work axios response problem it can not be regonized a new ModelAndView in spring boot
+            window.location="/frontView";// why modelAndView no work axios response problem it can not be regonized a new ModelAndView in spring boot
             }else{
               _this.errorMsg=response.data;
               alert("後端驗證from springboot     "+"\r"+_this.errorMsg);
