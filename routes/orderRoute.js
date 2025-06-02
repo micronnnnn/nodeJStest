@@ -3,10 +3,11 @@ const router = express.Router();
 const dessertOrder = require('../models/order'); // 直接引入單一 Model
 const dessertOrderItem = require('../models/orderItem'); // 直接引入單一 Model
 const Dessert = require('../models/dessert'); // 直接引入單一 Model
+const  { sendMail }  = require('../utility/mail'); // 直接引入單一 Model
 const dayjs = require('dayjs');
 
 
-
+//post//checkout
 
 router.post('/checkout', async (req, res) => {
   try {
@@ -49,12 +50,35 @@ router.post('/checkout', async (req, res) => {
     });
     }
 
+    await sendMail({
+      to: order.customer_email,
+      subject: `親愛的 ${order.customer_name}，您的訂單已成立！`,
+      text: "test",
+    });
+
     res.send("訂單成立");
   
 
   } catch (error) {
     console.error('❌ 發生錯誤:', error);
     res.status(500).send('Server error');
+  }
+});
+
+//POST /orderQuery
+router.post('/orderQuery', async (req, res) => {
+  try {
+    const data = await dessertOrder.findAll();
+    const formattedData = data.map(item => {
+        const json = item.toJSON(); // 轉為純物件
+        json.orderDate = dayjs(json.orderDate).format('YYYY-MM-DD HH:mm:ss');
+        return json;
+    });
+    res.json(formattedData);
+
+  } catch (err) {
+    console.error('查詢優惠碼失敗:', err);
+    res.status(500).send('Server Error');
   }
 });
 
