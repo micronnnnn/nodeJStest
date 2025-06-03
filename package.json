@@ -2,9 +2,9 @@
   "name": "my-nodejs-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +19,10 @@
     "nodemailer": "^7.0.3",
     "open": "^10.1.2",
     "sequelize": "^6.37.7"
+  },
+    "pkg": {
+    "assets": [
+      "public/**/*"
+    ]
   }
 }

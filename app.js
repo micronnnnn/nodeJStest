@@ -28,9 +28,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
+const basePath = process.pkg ? path.dirname(process.execPath) : __dirname;
+
+
 // 靜態資源路徑（提供 public 裡的檔案）
 // 這樣就允許最大傳入 10MB 的 JSON 或表單資料，非常適合你上傳圖片（base64 格式）用。
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(basePath, 'public')));
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -49,20 +52,23 @@ app.use('/dessertPic', picRouter); // 加上路徑前綴
 app.use('/', lineBotRoute); // 加上路徑前綴
 app.use('/dessert', orderRoute); // 加上路徑前綴
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(basePath, 'public', 'index.html'));
+});
 app.get('/backView', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'backView', 'dessert.html'));
+  res.sendFile(path.join(basePath, 'public', 'backView', 'dessert.html'));
 });
 app.get('/orderView', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'backView', 'order.html'));
+  res.sendFile(path.join(basePath, 'public', 'backView', 'order.html'));
 });
 app.get('/promoteView', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'backView', 'promotcode.html'));
+  res.sendFile(path.join(basePath, 'public', 'backView', 'promotcode.html'));
 });
 app.get('/frontView', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(basePath, 'public', 'index.html'));
 });
 app.get('/checkoutView', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'frontView', 'order.html'));
+  res.sendFile(path.join(basePath, 'public', 'frontView', 'order.html'));
 });
 
 app.listen(3000, () => {
